@@ -19,22 +19,26 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -108,6 +112,42 @@ fun NavigationBar(
     }
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
+@Composable
+fun SearchBar(modifier: Modifier = Modifier) {
+    var text by remember { mutableStateOf("") }
+
+    TextField(
+        value = text,
+        onValueChange = { text = it },
+        placeholder = { Text("Поиск места") },
+        singleLine = true,
+        trailingIcon = {
+            Icon(
+                Icons.Filled.Search,
+                contentDescription = null,
+                tint = White
+            )
+        },
+        shape = RoundedCornerShape(30.dp),
+        colors = TextFieldDefaults.colors(
+            focusedContainerColor = DarkGreen,
+            unfocusedContainerColor = DarkGreen,
+            focusedTextColor = White,
+            unfocusedTextColor = White,
+            cursorColor = White,
+            focusedPlaceholderColor = White,
+            unfocusedPlaceholderColor = White,
+            focusedIndicatorColor = Color.Transparent,
+            unfocusedIndicatorColor = Color.Transparent,
+            disabledIndicatorColor = Color.Transparent
+        ),
+        modifier = modifier
+            .fillMaxWidth()
+            .height(56.dp)
+    )
+}
+
 @PreviewScreenSizes
 @Composable
 fun ABASgoApp() {
@@ -122,12 +162,16 @@ fun ABASgoApp() {
             )
         }
     ) { innerPadding ->
-        Greeting(
-            name = "Android",
-            modifier = Modifier.padding(innerPadding)
-        )
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+                .padding(horizontal = 12.dp)
+        ) {
+            Spacer(modifier = Modifier.height(16.dp))
+            SearchBar()
+        }
     }
-
 }
 
 enum class AppDestinations(
@@ -139,20 +183,4 @@ enum class AppDestinations(
     HISTORY("История", "HISTORY"),
     ROULETTE("Рулетка", "ROULETTE"),
     MENU("Меню", "MENU"),
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    ABASgoTheme {
-        Greeting("Android")
-    }
 }
