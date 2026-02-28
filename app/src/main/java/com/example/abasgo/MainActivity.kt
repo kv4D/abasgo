@@ -9,6 +9,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -17,6 +18,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -148,6 +150,45 @@ fun SearchBar(modifier: Modifier = Modifier) {
     )
 }
 
+@Composable
+fun Panel(
+    modifier: Modifier = Modifier,
+    content: @Composable ColumnScope.() -> Unit
+) {
+    Column(
+        verticalArrangement = Arrangement.Center,
+        modifier = modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(28.dp))
+            .background(DarkGreen)
+            .padding(20.dp)
+    ) {
+        Column(
+            content = content
+        )
+    }
+}
+
+@Composable
+fun Favorite() {
+    Text("Избранное путешественника")
+}
+
+@Composable
+fun History() {
+    Text("История путешественника")
+}
+
+@Composable
+fun Roulette() {
+    Text("Рулетка путешественника")
+}
+
+@Composable
+fun Menu() {
+    Text("Меню")
+}
+
 @PreviewScreenSizes
 @Composable
 fun ABASgoApp() {
@@ -160,27 +201,47 @@ fun ABASgoApp() {
                 current = currentDestination,
                 onSelect =  {currentDestination = it }
             )
+        },
+        topBar = {
+            SearchBar(
+                modifier = Modifier
+                    .statusBarsPadding()
+                    .padding(horizontal = 12.dp)
+                    .padding(vertical = 20.dp),
+            )
         }
     ) { innerPadding ->
-        Column(
+        Column (
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
                 .padding(horizontal = 12.dp)
+                .padding(vertical = 20.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Spacer(modifier = Modifier.height(16.dp))
-            SearchBar()
+            if (currentDestination != AppDestinations.MAP){
+                Panel(
+                    content = {
+                        when (currentDestination) {
+                            AppDestinations.FAVORITE -> Favorite()
+                            AppDestinations.HISTORY -> History()
+                            AppDestinations.ROULETTE -> Roulette()
+                            AppDestinations.MENU -> Menu()
+                            else -> {}
+                        } },
+                )
+            }
         }
     }
 }
 
 enum class AppDestinations(
     val label: String,
-    val iconName: String,
 ) {
-    MAP("Карта", "MAP"),
-    FAVORITE("Избранное", "FAVORITE"),
-    HISTORY("История", "HISTORY"),
-    ROULETTE("Рулетка", "ROULETTE"),
-    MENU("Меню", "MENU"),
+    MAP("Карта"),
+    FAVORITE("Избранное"),
+    HISTORY("История"),
+    ROULETTE("Рулетка"),
+    MENU("Меню"),
 }
