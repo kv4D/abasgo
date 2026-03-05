@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -19,12 +20,22 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -39,13 +50,14 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.example.abasgo.ui.theme.ABASgoTheme
 import com.example.abasgo.ui.theme.Attention
+import com.example.abasgo.ui.theme.Black
 import com.example.abasgo.ui.theme.DarkGreen
 import com.example.abasgo.ui.theme.LightGreen
 import com.example.abasgo.ui.theme.White
@@ -93,7 +105,9 @@ fun NavigationBar(
                 Column (
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier.fillMaxSize().fillMaxHeight(),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .fillMaxHeight(),
 
                 ) {
                     Icon(
@@ -101,12 +115,11 @@ fun NavigationBar(
                         contentDescription = destination.label,
                         tint = if (isSelected) Attention else White
                     )
-                    Spacer(modifier = Modifier.height(2.dp))
                     Text(
                         text = destination.label,
                         textAlign = TextAlign.Center,
                         color = White,
-                        fontSize = 12.sp
+                        style = MaterialTheme.typography.labelSmall
                     )
                 }
             }
@@ -155,38 +168,265 @@ fun Panel(
     modifier: Modifier = Modifier,
     content: @Composable ColumnScope.() -> Unit
 ) {
+
+    val scrollState = rememberScrollState()
+
     Column(
-        verticalArrangement = Arrangement.Center,
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(28.dp))
             .background(DarkGreen)
-            .padding(20.dp)
-    ) {
-        Column(
+            .verticalScroll(scrollState)
+            .padding(20.dp),
             content = content
+    )
+}
+
+@Composable
+fun FavoritePlace(placeName: String) {
+    Row(
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Text(
+            placeName,
+            style = MaterialTheme.typography.labelLarge,
+            color = White
+        )
+        Button(
+            onClick = {  },
+            colors = ButtonColors(
+                containerColor = Attention,
+                contentColor = Black,
+                disabledContainerColor = Attention,
+                disabledContentColor = Black
+            ),
+            content = {
+                Text("Удалить", style = MaterialTheme.typography.bodyLarge)
+                Icon(
+                    painter = painterResource(AppIcons.Heart),
+                    contentDescription = "Лайк",
+                    tint = Black
+                )
+            }
         )
     }
 }
 
 @Composable
 fun Favorite() {
-    Text("Избранное путешественника")
+    Text(
+        text="Избранное путешественника",
+        style = MaterialTheme.typography.titleMedium,
+        color = LightGreen
+    )
+
+    FavoritePlace("Крутое место")
+}
+
+@Composable
+fun HistoryEntry(placeName: String, date: String) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Column {
+            Text(
+                placeName,
+                style = MaterialTheme.typography.labelMedium,
+                color = White
+            )
+            Text(
+                "Посещено: $date",
+                style = MaterialTheme.typography.bodySmall,
+                color = White
+            )
+        }
+        IconButton(onClick = {  }) {
+            Icon(
+                painter = painterResource(AppIcons.Edit),
+                contentDescription = "Изменить запись",
+                tint = White
+            )
+        }
+    }
 }
 
 @Composable
 fun History() {
-    Text("История путешественника")
+    Text(
+        text="История путешественника",
+        style = MaterialTheme.typography.titleMedium,
+        color = White
+        )
+    HistoryEntry("Крутое место 2", "01.12.2022")
+    HorizontalDivider(
+        color = LightGreen,
+        thickness = 2.dp
+    )
+    Text(
+        text="Дальше - больше!",
+        style = MaterialTheme.typography.bodySmall,
+        color = White
+    )
 }
 
 @Composable
 fun Roulette() {
-    Text("Рулетка путешественника")
+    Text(
+        text="Рулетка путешественника",
+        style = MaterialTheme.typography.titleMedium,
+        color = White
+    )
+    Text(
+        text="Пусть случайность создаст приключение",
+        style = MaterialTheme.typography.titleSmall,
+        color = White
+    )
+    Icon(
+        painter = painterResource(AppIcons.Cube),
+        contentDescription = "",
+        tint = Attention,
+        modifier = Modifier.size(128.dp)
+    )
+    Row(
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text="Убрать посещенные места",
+            style = MaterialTheme.typography.labelMedium,
+            color = White
+        )
+        Switch()
+    }
+    Button(
+        onClick = {},
+        colors = ButtonColors(
+            containerColor = LightGreen,
+            contentColor = White,
+            disabledContainerColor = Attention,
+            disabledContentColor = Black
+        ),
+        content = { Text("Вперед!", style = MaterialTheme.typography.bodyLarge) }
+    )
+}
+
+@Composable
+fun Switch() {
+    var checked by remember { mutableStateOf(true) }
+
+    Switch(
+        checked = checked,
+        onCheckedChange = {
+            checked = it
+        },
+        colors = SwitchDefaults.colors(
+            checkedThumbColor = White,
+            checkedTrackColor = Attention,
+            uncheckedThumbColor = MaterialTheme.colorScheme.secondary,
+            uncheckedTrackColor = MaterialTheme.colorScheme.secondaryContainer,
+        )
+    )
+}
+
+@Composable
+fun Setting(name: String) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween,
+        modifier = Modifier
+            .clip(RoundedCornerShape(28.dp))
+            .background(LightGreen)
+            .padding(all = 20.dp)
+            .fillMaxWidth()
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Icon(
+                painter = painterResource(AppIcons.Settings),
+                contentDescription = name,
+                tint = White
+            )
+            Column {
+                Text(
+                    text=name,
+                    style = MaterialTheme.typography.labelMedium,
+                    color = White
+                )
+                Text(
+                    text="Какое-то описание",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = White
+                )
+            }
+        }
+        Switch()
+    }
+}
+
+@Composable
+fun Avatar() {
+    Image(
+        painter = painterResource(id = R.drawable.default_avatar),
+        contentDescription = "Аватар",
+        contentScale = ContentScale.Crop,
+        modifier = Modifier
+            .clip(RoundedCornerShape(20.dp))
+            .size(75.dp)
+    )
 }
 
 @Composable
 fun Menu() {
-    Text("Меню")
+    Text(
+        text="Меню",
+        style = MaterialTheme.typography.titleMedium,
+        color = White
+    )
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween,
+        modifier = Modifier.fillMaxWidth(0.5f)
+    ) {
+        Avatar()
+        Column {
+            Text(
+                text="Username",
+                style = MaterialTheme.typography.labelLarge,
+                color = White
+            )
+            Text(
+                text="Уровень 1337",
+                style = MaterialTheme.typography.labelMedium,
+                color = LightGreen
+            )
+        }
+    }
+    Button(
+        onClick = {},
+        colors = ButtonColors(
+            containerColor = Attention,
+            contentColor = Black,
+            disabledContainerColor = Attention,
+            disabledContentColor = Black
+        ),
+        content = { Text("Выход") }
+    )
+
+    Setting("Настройка 1")
+    Setting("Настройка 2")
+    Setting("Настройка 3")
+    Setting("Настройка 4")
+    Setting("Настройка 5")
+
+    Text(
+        text="ABASgo. withered. 2026",
+        style = MaterialTheme.typography.labelSmall,
+        color = White
+    )
 }
 
 @PreviewScreenSizes

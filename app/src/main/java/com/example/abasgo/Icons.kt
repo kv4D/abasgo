@@ -23,6 +23,15 @@ object AppIcons {
 
     @DrawableRes
     val Menu = R.drawable.ic_menu
+
+    @DrawableRes
+    val Settings = R.drawable.ic_settings
+
+    @DrawableRes
+    val Edit = R.drawable.ic_edit
+
+    @DrawableRes
+    val Heart = R.drawable.ic_heart
 }
 
 fun getIconRes(name: String): Int {
@@ -32,22 +41,7 @@ fun getIconRes(name: String): Int {
         "HISTORY" -> AppIcons.History
         "ROULETTE" -> AppIcons.Cube
         "MENU" -> AppIcons.Menu
+        "SETTINGS" -> AppIcons.Settings
         else -> AppIcons.Map
     }
-}
-
-
-@Composable
-fun AppIcon(
-    iconRes: Int,
-    contentDescription: String?,
-    modifier: Modifier = Modifier,
-    tint: Color = Color.Unspecified
-) {
-    Icon(
-        painter = painterResource(id = iconRes),
-        contentDescription = contentDescription,
-        modifier = modifier,
-        tint = tint
-    )
 }
