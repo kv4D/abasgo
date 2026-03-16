@@ -1,2 +1,9 @@
-# abasgo
-Android app for travelling around
+# ABASgo
+## Андроид приложение для тех, кто любит путешествовать
+
+### Создание APK с помощью командной строки
+- Разместить код локально
+- Открыть терминал в папке с файлами приложения
+- Ввести команду "gradlew assemble" (или .\gradlew assemble на Windows)
+- APK-файл будет расположен по адресу "\app\build\outputs\apk\release"
+
