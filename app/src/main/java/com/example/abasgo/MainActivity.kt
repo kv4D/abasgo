@@ -12,13 +12,17 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -51,6 +55,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import com.example.abasgo.ui.theme.ABASgoTheme
@@ -83,11 +88,11 @@ fun NavigationBar(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(bottom = 20.dp)
-            .padding(12.dp)
+            .navigationBarsPadding()
+            .padding(horizontal = 16.dp, vertical = 12.dp)
             .clip(RoundedCornerShape(70.dp))
             .background(DarkGreen)
-            .padding(vertical = 6.dp),
+            .padding(vertical = 8.dp),
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
         AppDestinations.entries.forEach { destination ->
@@ -96,7 +101,8 @@ fun NavigationBar(
 
             Box(
                 modifier = Modifier
-                    .size(75.dp)
+                    .size(60.dp)
+                    .clip(CircleShape)
                     .background(
                         color = if (isSelected) LightGreen else DarkGreen,
                         shape = CircleShape
@@ -106,20 +112,21 @@ fun NavigationBar(
                 Column (
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .fillMaxHeight(),
+                    modifier = Modifier.fillMaxSize()
 
                 ) {
                     Icon(
                         painter = painterResource(id = getIconRes(destination.name)),
                         contentDescription = destination.label,
-                        tint = if (isSelected) Attention else White
+                        tint = if (isSelected) Attention else White,
+                        modifier = Modifier.size(16.dp)
                     )
                     Text(
                         text = destination.label,
                         textAlign = TextAlign.Center,
                         color = White,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
                         style = MaterialTheme.typography.labelSmall
                     )
                 }
@@ -295,13 +302,14 @@ fun Roulette() {
         modifier = Modifier.size(128.dp)
     )
     Row(
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
             text="Убрать посещенные места",
             style = MaterialTheme.typography.labelMedium,
             color = White
         )
+        Spacer(modifier = Modifier.width(12.dp))
         Switch()
     }
     Button(
@@ -455,7 +463,7 @@ fun ABASgoApp() {
                 modifier = Modifier
                     .statusBarsPadding()
                     .padding(horizontal = 12.dp)
-                    .padding(vertical = 20.dp),
+                    .padding(vertical = 12.dp),
             )
         }
     ) { innerPadding ->
@@ -464,7 +472,7 @@ fun ABASgoApp() {
                 .fillMaxSize()
                 .padding(innerPadding)
                 .padding(horizontal = 12.dp)
-                .padding(vertical = 20.dp),
+                .padding(vertical = 12.dp),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
