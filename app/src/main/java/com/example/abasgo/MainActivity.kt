@@ -1,6 +1,7 @@
 package com.example.abasgo
 
 import android.os.Bundle
+import android.widget.Space
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -52,6 +53,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
@@ -67,6 +69,7 @@ import com.example.abasgo.ui.theme.LightGreen
 import com.example.abasgo.ui.theme.White
 import com.example.abasgo.ui.SystemBars
 import com.example.abasgo.ui.getIconRes
+import com.example.abasgo.ui.theme.BrightGreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -83,16 +86,15 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun NavigationBar(
     current: AppDestinations,
-    onSelect: (AppDestinations) -> Unit
+    onSelect: (AppDestinations) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
-            .navigationBarsPadding()
-            .padding(horizontal = 16.dp, vertical = 12.dp)
             .clip(RoundedCornerShape(70.dp))
             .background(DarkGreen)
-            .padding(vertical = 8.dp),
+            .padding(vertical = 4.dp),
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
         AppDestinations.entries.forEach { destination ->
@@ -101,7 +103,7 @@ fun NavigationBar(
 
             Box(
                 modifier = Modifier
-                    .size(60.dp)
+                    .size(62.dp)
                     .clip(CircleShape)
                     .background(
                         color = if (isSelected) LightGreen else DarkGreen,
@@ -119,8 +121,9 @@ fun NavigationBar(
                         painter = painterResource(id = getIconRes(destination.name)),
                         contentDescription = destination.label,
                         tint = if (isSelected) Attention else White,
-                        modifier = Modifier.size(16.dp)
+                        modifier = Modifier.size(18.dp)
                     )
+                    Spacer(modifier = Modifier.height(1.dp))
                     Text(
                         text = destination.label,
                         textAlign = TextAlign.Center,
@@ -167,7 +170,7 @@ fun SearchBar(modifier: Modifier = Modifier) {
         ),
         modifier = modifier
             .fillMaxWidth()
-            .height(56.dp)
+            .height(48.dp)
     )
 }
 
@@ -213,7 +216,7 @@ fun FavoritePlace(placeName: String) {
                 disabledContentColor = Black
             ),
             content = {
-                Text("Удалить", style = MaterialTheme.typography.bodyLarge)
+                Text("Удалить", style = MaterialTheme.typography.labelMedium)
                 Icon(
                     painter = painterResource(AppIcons.Heart),
                     contentDescription = "Лайк",
@@ -229,7 +232,7 @@ fun Favorite() {
     Text(
         text="Избранное путешественника",
         style = MaterialTheme.typography.titleMedium,
-        color = LightGreen
+        color = BrightGreen
     )
 
     FavoritePlace("Крутое место")
@@ -258,7 +261,8 @@ fun HistoryEntry(placeName: String, date: String) {
             Icon(
                 painter = painterResource(AppIcons.Edit),
                 contentDescription = "Изменить запись",
-                tint = White
+                tint = White,
+                modifier = Modifier.size(28.dp)
             )
         }
     }
@@ -269,7 +273,7 @@ fun History() {
     Text(
         text="История путешественника",
         style = MaterialTheme.typography.titleMedium,
-        color = White
+        color = BrightGreen
         )
     HistoryEntry("Крутое место 2", "01.12.2022")
     HorizontalDivider(
@@ -288,7 +292,7 @@ fun Roulette() {
     Text(
         text="Рулетка путешественника",
         style = MaterialTheme.typography.titleMedium,
-        color = White
+        color = BrightGreen
     )
     Text(
         text="Пусть случайность создаст приключение",
@@ -320,7 +324,7 @@ fun Roulette() {
             disabledContainerColor = Attention,
             disabledContentColor = Black
         ),
-        content = { Text("Вперед!", style = MaterialTheme.typography.bodyLarge) }
+        content = { Text("Вперед!", style = MaterialTheme.typography.labelMedium) }
     )
 }
 
@@ -333,6 +337,11 @@ fun Switch() {
         onCheckedChange = {
             checked = it
         },
+        modifier = Modifier
+            .graphicsLayer {
+                scaleX = 0.9f
+                scaleY = 0.9f
+            },
         colors = SwitchDefaults.colors(
             checkedThumbColor = White,
             checkedTrackColor = Attention,
@@ -350,7 +359,7 @@ fun Setting(name: String) {
         modifier = Modifier
             .clip(RoundedCornerShape(28.dp))
             .background(LightGreen)
-            .padding(all = 20.dp)
+            .padding(all = 12.dp)
             .fillMaxWidth()
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -359,6 +368,7 @@ fun Setting(name: String) {
                 contentDescription = name,
                 tint = White
             )
+            Spacer(modifier = Modifier.width(12.dp))
             Column {
                 Text(
                     text=name,
@@ -393,14 +403,15 @@ fun Menu() {
     Text(
         text="Меню",
         style = MaterialTheme.typography.titleMedium,
-        color = White
+        color = BrightGreen
     )
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween,
-        modifier = Modifier.fillMaxWidth(0.5f)
+        horizontalArrangement = Arrangement.Center,
+        modifier = Modifier.fillMaxWidth()
     ) {
         Avatar()
+        Spacer(modifier = Modifier.width(12.dp))
         Column {
             Text(
                 text="Username",
@@ -410,10 +421,17 @@ fun Menu() {
             Text(
                 text="Уровень 1337",
                 style = MaterialTheme.typography.labelMedium,
-                color = LightGreen
+                color = BrightGreen
             )
         }
     }
+
+    Setting("Настройка 1")
+    Setting("Настройка 2")
+    Setting("Настройка 3")
+    Setting("Настройка 4")
+    Setting("Настройка 5")
+
     Button(
         onClick = {},
         colors = ButtonColors(
@@ -422,14 +440,8 @@ fun Menu() {
             disabledContainerColor = Attention,
             disabledContentColor = Black
         ),
-        content = { Text("Выход") }
+        content = { Text("Выход", style = MaterialTheme.typography.labelMedium) }
     )
-
-    Setting("Настройка 1")
-    Setting("Настройка 2")
-    Setting("Настройка 3")
-    Setting("Настройка 4")
-    Setting("Настройка 5")
 
     Text(
         text="ABASgo. withered. 2026",
@@ -455,7 +467,11 @@ fun ABASgoApp() {
         bottomBar = {
             NavigationBar(
                 current = currentDestination,
-                onSelect =  {currentDestination = it }
+                onSelect = {currentDestination = it },
+                modifier = Modifier
+                        .navigationBarsPadding()
+                        .padding(horizontal = 12.dp)
+                        .padding(vertical = 12.dp),
             )
         },
         topBar = {

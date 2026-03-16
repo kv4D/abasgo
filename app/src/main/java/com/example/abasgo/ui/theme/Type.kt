@@ -48,7 +48,7 @@ val Typography = Typography(
     titleSmall = TextStyle(
         fontFamily = oneUISansFamily,
         fontWeight = FontWeight.SemiBold,
-        fontSize = 20.sp,
+        fontSize = 18.sp,
         lineHeight = 28.sp,
         letterSpacing = 0.sp
     ),
