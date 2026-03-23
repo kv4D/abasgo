@@ -9,12 +9,16 @@ import com.example.abasgo.data.dao.ReviewDao
 import com.example.abasgo.data.dao.UserDao
 import com.example.abasgo.data.dao.VisitedPlaceDao
 import com.example.abasgo.data.entity.User
+import com.example.abasgo.data.entity.Review
+import com.example.abasgo.data.entity.VisitedPlace
 import com.example.abasgo.data.entity.FavouritePlace
 
 @Database(
     entities = [
         User::class,
         FavouritePlace::class,
+        Review::class,
+        VisitedPlace::class
    ],
     version = 1)
 abstract class AppDatabase : RoomDatabase() {
