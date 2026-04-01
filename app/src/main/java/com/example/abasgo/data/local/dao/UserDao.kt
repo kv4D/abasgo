@@ -1,5 +1,6 @@
 package com.example.abasgo.data.local.dao
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -12,10 +13,10 @@ import com.example.abasgo.data.entity.UserVisitedPlaces
 @Dao
 interface UserDao {
     @Query("SELECT * FROM users")
-    suspend fun getAll(): List<User>
+    fun getAll(): LiveData<List<User>>
 
     @Query("SELECT * FROM users WHERE id=:id")
-    suspend fun findById(id: Long): User
+    fun findById(id: Long): User
 
     @Insert
     suspend fun insert(user: User)
@@ -25,9 +26,9 @@ interface UserDao {
 
     @Transaction
     @Query("SELECT * FROM users WHERE id=:id")
-    suspend fun getUserFavouritePlaces(id: Long): List<UserFavouritePlaces>
+    fun getUserFavouritePlaces(id: Long): LiveData<List<UserFavouritePlaces>>
 
     @Transaction
     @Query("SELECT * FROM users WHERE id=:id")
-    suspend fun getUserVisitedPlaces(id: Long): List<UserVisitedPlaces>
+    fun getUserVisitedPlaces(id: Long): LiveData<List<UserVisitedPlaces>>
 }

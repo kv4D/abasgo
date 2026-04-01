@@ -2,10 +2,11 @@ package com.example.abasgo.data.entity
 
 import androidx.room.Embedded
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
 import androidx.room.Relation
 
-@Entity("users")
+@Entity("users", indices = [Index(value = ["username"])])
 data class User(
     @PrimaryKey(autoGenerate = true) val id: Long,
     val username: String

@@ -4,7 +4,7 @@ package com.example.abasgo.ui.state
 enum class AppPanel(
     val label: String,
 ) {
-    DEFAULT("Стандарт"),
+    MAP("Карта"),
     FAVORITE("Избранное"),
     HISTORY("История"),
     ROULETTE("Рулетка"),
@@ -12,5 +12,5 @@ enum class AppPanel(
 }
 
 data class MainState(
-    val activePanel: AppPanel = AppPanel.DEFAULT
+    val activePanel: AppPanel = AppPanel.MAP
 )

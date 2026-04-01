@@ -1,11 +1,13 @@
 package com.example.abasgo.data.local.dao
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
 import com.example.abasgo.data.entity.FavouritePlace
+import com.example.abasgo.data.entity.Review
 import com.example.abasgo.data.entity.ReviewWithUser
 import com.example.abasgo.data.entity.UserFavouritePlaces
 
@@ -16,11 +18,14 @@ interface ReviewDao {
         SELECT * FROM reviews 
         WHERE placeId = :placeId 
         """)
-    suspend fun getPlaceReviewsWithUsers(placeId: Long): List<ReviewWithUser>
+    fun getPlaceReviewsWithUsers(placeId: Long): LiveData<List<ReviewWithUser>>
 
     @Delete
-    suspend fun delete(place: FavouritePlace)
+    suspend fun delete(review: Review)
 
     @Insert
-    suspend fun insert(place: FavouritePlace)
+    suspend fun insert(review: Review)
+
+    @Query("SELECT COUNT(*) FROM reviews")
+    fun getAmount(): LiveData<Int>
 }

@@ -3,6 +3,7 @@ package com.example.abasgo.data.entity
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.Index
 import androidx.room.PrimaryKey
 import androidx.room.Relation
 
@@ -15,7 +16,8 @@ import androidx.room.Relation
             childColumns = ["userId"],
             onDelete = ForeignKey.CASCADE
         )
-    ]
+    ],
+    indices = [Index(value = ["userId"])]
 )
 data class Review(
     @PrimaryKey(autoGenerate = true) val id: Long,

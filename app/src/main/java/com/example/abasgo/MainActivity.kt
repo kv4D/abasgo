@@ -97,7 +97,7 @@ fun ABASgoApp(viewModel:  MainViewModel = viewModel()) {
                 AppPanel.HISTORY -> HistoryPanel(modifier)
                 AppPanel.ROULETTE -> RoulettePanel(modifier)
                 AppPanel.MENU -> MenuPanel(modifier)
-                AppPanel.DEFAULT -> {}
+                AppPanel.MAP -> {}
             }
         }
     }
