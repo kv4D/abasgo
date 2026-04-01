@@ -20,7 +20,7 @@ import androidx.room.Relation
     indices = [Index(value = ["userId"])]
 )
 data class Review(
-    @PrimaryKey(autoGenerate = true) val id: Long,
+    @PrimaryKey(autoGenerate = true) val id: Long = 0,
     val placeId: Long,
     val userId: Long,
 

@@ -1,28 +1,27 @@
 package com.example.abasgo.data.local
 
 import com.example.abasgo.data.entity.User
-import com.example.abasgo.data.entity.Review
 import com.example.abasgo.data.entity.VisitedPlace
 import com.example.abasgo.data.entity.FavouritePlace
 import com.example.abasgo.data.local.dao.FavouritePlaceDao
-import com.example.abasgo.data.local.dao.ReviewDao
 import com.example.abasgo.data.local.dao.UserDao
 import com.example.abasgo.data.local.dao.VisitedPlaceDao
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 
 @Database(
-    entities = [User::class, Review::class, VisitedPlace::class, FavouritePlace::class],
+    entities = [User::class, VisitedPlace::class, FavouritePlace::class],
     version = 1,
     exportSchema = false
 )
+@TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
     abstract fun favouritePlaceDao(): FavouritePlaceDao
     abstract fun visitedPlaceDao(): VisitedPlaceDao
-    abstract fun reviewDao(): ReviewDao
 
     companion object {
         @Volatile

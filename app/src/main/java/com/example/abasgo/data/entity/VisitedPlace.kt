@@ -1,29 +1,18 @@
 package com.example.abasgo.data.entity
 
 import androidx.room.Entity
-import androidx.room.ForeignKey
-import androidx.room.Index
 import androidx.room.PrimaryKey
+import java.util.Date
 
-@Entity(
-    "visited_places",
-    foreignKeys = [
-        ForeignKey(
-            entity = User::class,
-            parentColumns = ["id"],
-            childColumns = ["userId"],
-            onDelete = ForeignKey.CASCADE
-        )
-    ],
-    indices = [Index(value = ["userId"])]
-)
+@Entity("visited_places")
 data class VisitedPlace(
-    @PrimaryKey(autoGenerate = true) val id: Long,
-    val placeId: Long,
-    val userId: Long,
-    val longitude: Long,
-    val latitude: Long,
+    @PrimaryKey(autoGenerate = true) val id: Long = 0,
+    val osmId: Long?,
+    val longitude: Long?,
+    val latitude: Long?,
 
-    val visitDate: Long,
-    val note: String?
+    val name: String? = null,
+
+    val visitDate: Date?,
+    val note: String?,
 )

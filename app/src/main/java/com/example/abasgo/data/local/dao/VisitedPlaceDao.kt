@@ -5,10 +5,8 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
-import androidx.room.Transaction
-import com.example.abasgo.data.entity.User
+import androidx.room.Update
 import com.example.abasgo.data.entity.VisitedPlace
-import com.example.abasgo.data.entity.UserVisitedPlaces
 
 @Dao
 interface VisitedPlaceDao {
@@ -19,6 +17,9 @@ interface VisitedPlaceDao {
 
     @Insert
     suspend fun insert(place: VisitedPlace)
+
+    @Update
+    suspend fun update(place: VisitedPlace): Int
 
     @Query("SELECT COUNT(*) FROM visited_places")
     fun getAmount(): LiveData<Int>
