@@ -12,5 +12,5 @@ enum class AppPanel(
 }
 
 data class MainState(
-    val activePanel: AppPanel = AppPanel.MAP
+    val panelStack: List<AppPanel> = listOf(AppPanel.MAP)
 )

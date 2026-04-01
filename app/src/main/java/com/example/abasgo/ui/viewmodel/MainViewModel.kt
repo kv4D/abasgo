@@ -13,7 +13,32 @@ class MainViewModel : ViewModel() {
     var state by mutableStateOf(MainState())
         private set
 
-    fun openPanel(panel: AppPanel) {
-        state = state.copy(activePanel = panel)
+    fun getCurrentPanel(): AppPanel {
+        return state.panelStack.last()
+    }
+
+    fun pushPanel(panel: AppPanel) {
+        state = state.copy(
+            panelStack = state.panelStack + panel
+        )
+    }
+
+    fun popPanel() {
+        if (state.panelStack.isNotEmpty()) {
+            state = state.copy(
+                panelStack = state.panelStack.dropLast(1)
+            )
+        }
+    }
+
+    fun replacePanel(newPanel: AppPanel) {
+        if (state.panelStack.isNotEmpty()) {
+            state = state.copy(
+                panelStack = state.panelStack.dropLast(1)
+            )
+            state = state.copy(
+                panelStack = state.panelStack + newPanel
+            )
+        }
     }
 }

@@ -11,6 +11,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import com.example.abasgo.ui.theme.Attention
+import com.example.abasgo.ui.theme.BrightGreen
+import com.example.abasgo.ui.theme.LightGreen
 import com.example.abasgo.ui.theme.White
 
 @Composable
@@ -29,7 +31,7 @@ fun Switch() {
             },
         colors = SwitchDefaults.colors(
             checkedThumbColor = White,
-            checkedTrackColor = Attention,
+            checkedTrackColor = LightGreen,
             uncheckedThumbColor = MaterialTheme.colorScheme.secondary,
             uncheckedTrackColor = MaterialTheme.colorScheme.secondaryContainer,
         )

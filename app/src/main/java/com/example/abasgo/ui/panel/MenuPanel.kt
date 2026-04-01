@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
@@ -26,7 +27,7 @@ import com.example.abasgo.ui.theme.White
 
 @Composable
 fun MenuPanel(modifier: Modifier = Modifier,) {
-    Panel(modifier) {
+    Panel(modifier.fillMaxHeight()) {
         Text(
             text="Меню",
             style = MaterialTheme.typography.titleMedium,
@@ -53,11 +54,20 @@ fun MenuPanel(modifier: Modifier = Modifier,) {
             }
         }
 
+        DefaultButton(
+            onClick = {},
+            colors = ButtonColors(
+                containerColor = BrightGreen,
+                contentColor = White,
+                disabledContainerColor = Attention,
+                disabledContentColor = Black
+            ),
+            text = "Изменить данные"
+        )
+
         Setting("Настройка 1")
         Setting("Настройка 2")
         Setting("Настройка 3")
-        Setting("Настройка 4")
-        Setting("Настройка 5")
 
         DefaultButton(
             onClick = {},

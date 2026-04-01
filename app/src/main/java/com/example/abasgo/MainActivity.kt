@@ -60,13 +60,14 @@ fun ABASgoApp(viewModel:  MainViewModel = viewModel()) {
     )
 
     val state = viewModel.state
+    val currentPanel = viewModel.getCurrentPanel()
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         bottomBar = {
             NavigationBar(
-                current = state.activePanel,
-                onSelect = { viewModel.openPanel(it) },
+                current = currentPanel,
+                onSelect = { viewModel.replacePanel(it) },
                 modifier = Modifier
                         .navigationBarsPadding()
                         .padding(horizontal = 12.dp)
@@ -92,7 +93,7 @@ fun ABASgoApp(viewModel:  MainViewModel = viewModel()) {
                 .padding(horizontal = 12.dp)
                 .padding(vertical = 12.dp)
 
-            when (state.activePanel) {
+            when (currentPanel) {
                 AppPanel.FAVORITE -> FavoritePanel(modifier)
                 AppPanel.HISTORY -> HistoryPanel(modifier)
                 AppPanel.ROULETTE -> RoulettePanel(modifier)
