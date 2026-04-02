@@ -17,7 +17,8 @@ class FavouritePlaceRepository @Inject constructor(
             osmId = 0,
             longitude = 0,
             latitude = 0,
-            name = name)
+            name = name
+        )
         favouritePlaceDao.insert(place)
     }
 

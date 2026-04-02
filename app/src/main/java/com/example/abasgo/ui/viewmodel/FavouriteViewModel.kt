@@ -35,10 +35,17 @@ class FavouriteViewModel @Inject constructor(
         repository.add("Место $num")
     }
 
+    fun deletePlace(place: FavouritePlace) = viewModelScope.launch {
+        repository.delete(place)
+    }
+
     fun onEvent(event: FavouriteEvent) {
         when (event) {
             is FavouriteEvent.AddPlaceClicked -> {
                 addPlace()
+            }
+            is FavouriteEvent.DeletePlaceClicked -> {
+                deletePlace(event.place)
             }
         }
     }

@@ -10,21 +10,23 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import com.example.abasgo.data.entity.FavouritePlace
 import com.example.abasgo.ui.AppIcons
+import com.example.abasgo.ui.events.FavouriteEvent
 import com.example.abasgo.ui.theme.Attention
 import com.example.abasgo.ui.theme.Black
 import com.example.abasgo.ui.theme.White
 
 
 @Composable
-fun FavouritePlace(placeName: String) {
+fun FavouritePlace(place: FavouritePlace, onEvent: (FavouriteEvent) -> Unit) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.fillMaxWidth()
     ) {
         Text(
-            placeName,
+            place.name ?: "Крутое место",
             style = MaterialTheme.typography.labelLarge,
             color = White
         )
@@ -37,7 +39,7 @@ fun FavouritePlace(placeName: String) {
             ),
             icon = painterResource(AppIcons.Heart),
             text = "Удалить",
-            onClick = {}
+            onClick = { onEvent(FavouriteEvent.DeletePlaceClicked(place)) }
         )
     }
 }

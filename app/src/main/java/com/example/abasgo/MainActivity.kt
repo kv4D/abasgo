@@ -57,8 +57,7 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun ABASgoApp() {
-    // VM placed here and only here
-    val viewModel: MainViewModel = hiltViewModel()
+    val viewModel: MainViewModel = viewModel()
 
     SystemBars(
         statusBarColor = DarkGreen,

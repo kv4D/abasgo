@@ -38,12 +38,15 @@ fun FavouritePanel(
         )
         when (uiState) {
             is FavouriteUIState.Loading -> {
-                // wait till it loads
                 CircularProgressIndicator()
             }
             is FavouriteUIState.Success -> {
                 val places = uiState.places
-
+                Text(
+                    text="Количество: ${places.size}",
+                    style = MaterialTheme.typography.titleSmall,
+                    color = BrightGreen
+                )
                 LazyColumn(
                     modifier = Modifier.weight(1f),
                 ) {
@@ -51,17 +54,13 @@ fun FavouritePanel(
                         items = places,
                         key = { it.id }
                     ) { place ->
-                        if (place.name == null) {
-                            FavouritePlace(placeName = "Крутое место")
-                        } else {
-                            FavouritePlace(placeName = place.name)
-                        }
+                            FavouritePlace(place, onEvent = onEvent)
                     }
                 }
             }
             is FavouriteUIState.Error -> {
                 Text(
-                    text = (uiState as FavouriteUIState.Error).message,
+                    text = uiState.message,
                     color = Attention,
                 )
             }
