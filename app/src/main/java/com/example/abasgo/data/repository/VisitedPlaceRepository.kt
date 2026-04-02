@@ -1,17 +1,15 @@
 package com.example.abasgo.data.repository
 
-import androidx.lifecycle.LiveData
 import com.example.abasgo.data.entity.VisitedPlace
 import com.example.abasgo.data.local.dao.VisitedPlaceDao
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
-import java.time.LocalDate
-import java.time.ZoneId
 import java.util.Date
 
 class VisitedPlaceRepository @Inject constructor(
     private val visitedPlaceDao: VisitedPlaceDao
 ) {
-    fun getAll() : LiveData<List<VisitedPlace>> {
+    fun getAll() : Flow<List<VisitedPlace>> {
         return visitedPlaceDao.getAll()
     }
 
@@ -31,11 +29,11 @@ class VisitedPlaceRepository @Inject constructor(
         visitedPlaceDao.delete(place)
     }
 
-    fun getAmount(): LiveData<Int> {
+    fun getAmount(): Flow<Int> {
         return visitedPlaceDao.getAmount()
     }
 
     suspend fun updateNote(place: VisitedPlace, note: String) {
-        visitedPlaceDao
+        visitedPlaceDao.updateNote(note, place.id)
     }
 }

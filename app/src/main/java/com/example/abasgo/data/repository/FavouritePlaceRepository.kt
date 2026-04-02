@@ -1,20 +1,20 @@
 package com.example.abasgo.data.repository
 
-import androidx.lifecycle.LiveData
 import com.example.abasgo.data.entity.FavouritePlace
 import com.example.abasgo.data.local.dao.FavouritePlaceDao
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class FavouritePlaceRepository @Inject constructor(
     private val favouritePlaceDao: FavouritePlaceDao
 ) {
-    fun getAll() : LiveData<List<FavouritePlace>> {
+    fun getAll() : Flow<List<FavouritePlace>> {
         return favouritePlaceDao.getAll()
     }
 
-    suspend fun add(placeId: Long, name: String? = null) {
+    suspend fun add(name: String? = null) {
         val place = FavouritePlace(
-            osmId = placeId,
+            osmId = 0,
             longitude = 0,
             latitude = 0,
             name = name)
@@ -25,7 +25,7 @@ class FavouritePlaceRepository @Inject constructor(
         favouritePlaceDao.delete(place)
     }
 
-    fun getAmount(): LiveData<Int> {
+    fun getAmount(): Flow<Int> {
         return favouritePlaceDao.getAmount()
     }
 }

@@ -11,6 +11,9 @@
       <SelectionState runConfigName="Phone - ABASgoApp">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
+      <SelectionState runConfigName="Phone - ABASgoAppPreview">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
     </selectionStates>
   </component>
 </project>

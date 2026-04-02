@@ -17,7 +17,7 @@ import com.example.abasgo.ui.theme.White
 
 
 @Composable
-fun FavoritePlace(placeName: String) {
+fun FavouritePlace(placeName: String) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
