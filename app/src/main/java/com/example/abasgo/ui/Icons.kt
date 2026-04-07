@@ -4,36 +4,27 @@ import androidx.annotation.DrawableRes
 import com.example.abasgo.R
 
 
+data class AppIcon(
+    @DrawableRes val iconRes: Int,
+    val label: String
+)
+
 object AppIcons {
-    @DrawableRes
-    val Map = R.drawable.ic_map
-
-    @DrawableRes
-    val Favorite = R.drawable.ic_favorite
-
-    @DrawableRes
-    val History = R.drawable.ic_history
-
-    @DrawableRes
-    val Cube = R.drawable.ic_cube
-
-    @DrawableRes
-    val Menu = R.drawable.ic_menu
-
-    @DrawableRes
-    val Settings = R.drawable.ic_settings
-
-    @DrawableRes
-    val Edit = R.drawable.ic_edit
-
-    @DrawableRes
-    val Heart = R.drawable.ic_heart
+    val Map = AppIcon(R.drawable.ic_map, "Карта")
+    val Favourite = AppIcon(R.drawable.ic_favorite, "Избранное")
+    val History = AppIcon(R.drawable.ic_history, "История")
+    val Cube = AppIcon(R.drawable.ic_cube, "Рулетка")
+    val Menu = AppIcon(R.drawable.ic_menu, "Меню")
+    val Settings = AppIcon(R.drawable.ic_settings, "Настройки")
+    val Edit = AppIcon(R.drawable.ic_edit, "Изменить")
+    val Heart = AppIcon(R.drawable.ic_heart, "Сердце")
+    val Delete = AppIcon(R.drawable.ic_delete, "Удалить")
 }
 
-fun getIconRes(name: String): Int {
-    return when (name) {
+fun getIconRes(name: String): AppIcon {
+    return when (name.uppercase()) {
         "MAP" -> AppIcons.Map
-        "FAVORITE" -> AppIcons.Favorite
+        "FAVOURITE" -> AppIcons.Favourite
         "HISTORY" -> AppIcons.History
         "ROULETTE" -> AppIcons.Cube
         "MENU" -> AppIcons.Menu

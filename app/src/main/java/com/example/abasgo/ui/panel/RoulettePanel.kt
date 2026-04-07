@@ -39,7 +39,7 @@ fun RoulettePanel(modifier: Modifier = Modifier,) {
             color = White
         )
         Icon(
-            painter = painterResource(AppIcons.Cube),
+            painter = painterResource(AppIcons.Cube.iconRes),
             contentDescription = "",
             tint = Attention,
             modifier = Modifier.size(128.dp)

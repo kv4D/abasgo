@@ -7,6 +7,7 @@ import com.example.abasgo.data.local.dao.FavouritePlaceDao
 import com.example.abasgo.data.local.dao.UserDao
 import com.example.abasgo.data.local.dao.VisitedPlaceDao
 import android.content.Context
+import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
@@ -14,10 +15,13 @@ import androidx.room.TypeConverters
 
 @Database(
     entities = [User::class, VisitedPlace::class, FavouritePlace::class],
-    version = 1,
-    exportSchema = false
+    version = 2,
+    autoMigrations = [
+        AutoMigration(from = 1, to = 2)
+    ],
+    exportSchema = true
 )
-@TypeConverters(Converters::class)
+@TypeConverters(DateConverters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
     abstract fun favouritePlaceDao(): FavouritePlaceDao
@@ -33,7 +37,7 @@ abstract class AppDatabase : RoomDatabase() {
                     context.applicationContext,
                     AppDatabase::class.java,
                     "app_database"
-                ).build()
+                ).fallbackToDestructiveMigration(dropAllTables = true).build()
                 INSTANCE = instance
                 instance
             }

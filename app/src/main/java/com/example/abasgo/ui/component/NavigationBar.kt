@@ -26,7 +26,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.example.abasgo.ui.getIconRes
-import com.example.abasgo.ui.state.AppPanel
+import com.example.abasgo.ui.AppRoute
+import com.example.abasgo.ui.getNavigationRoutes
+import com.example.abasgo.ui.hasCommonBaseRoute
 import com.example.abasgo.ui.theme.Attention
 import com.example.abasgo.ui.theme.DarkGreen
 import com.example.abasgo.ui.theme.LightGreen
@@ -34,8 +36,8 @@ import com.example.abasgo.ui.theme.White
 
 @Composable
 fun NavigationBar(
-    current: AppPanel,
-    onSelect: (AppPanel) -> Unit,
+    current: AppRoute,
+    onSelect: (AppRoute) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -46,9 +48,9 @@ fun NavigationBar(
             .padding(vertical = 4.dp),
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
-        AppPanel.entries.forEach { destination ->
-
-            val isSelected = destination == current
+        getNavigationRoutes().forEach { destination ->
+            // to highlight inner panels
+            val isSelected = hasCommonBaseRoute(destination, current)
 
             Box(
                 modifier = Modifier
@@ -66,15 +68,16 @@ fun NavigationBar(
                     modifier = Modifier.fillMaxSize()
 
                 ) {
+                    val appIcon = getIconRes(destination.route)
                     Icon(
-                        painter = painterResource(id = getIconRes(destination.name)),
-                        contentDescription = destination.label,
+                        painter = painterResource(id = appIcon.iconRes),
+                        contentDescription = appIcon.label,
                         tint = if (isSelected) Attention else White,
                         modifier = Modifier.size(18.dp)
                     )
                     Spacer(modifier = Modifier.height(1.dp))
                     Text(
-                        text = destination.label,
+                        text = appIcon.label,
                         textAlign = TextAlign.Center,
                         color = White,
                         maxLines = 1,

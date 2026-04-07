@@ -37,7 +37,7 @@ fun Setting(name: String) {
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Icon(
-                painter = painterResource(AppIcons.Settings),
+                painter = painterResource(AppIcons.Settings.iconRes),
                 contentDescription = name,
                 tint = White
             )

@@ -1,16 +1,16 @@
 package com.example.abasgo.data.local
 
 import androidx.room.TypeConverter
-import java.util.Date
+import java.time.LocalDate
 
-class Converters {
+class DateConverters {
     @TypeConverter
-    fun fromTimestamp(value: Long?): Date? {
-        return value?.let { Date(it) }
+    fun fromLocalDate(value: LocalDate?): String? {
+        return value?.toString()
     }
 
     @TypeConverter
-    fun dateToTimestamp(date: Date?): Long? {
-        return date?.time
+    fun toLocalDate(value: String?): LocalDate? {
+        return value?.let { LocalDate.parse(it) }
     }
 }

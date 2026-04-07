@@ -6,6 +6,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -20,22 +21,30 @@ import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.abasgo.ui.theme.ABASgoTheme
 import com.example.abasgo.ui.theme.DarkGreen
 import com.example.abasgo.ui.SystemBars
 import com.example.abasgo.ui.component.NavigationBar
 import com.example.abasgo.ui.component.SearchBar
+import com.example.abasgo.ui.AppRoute
 import com.example.abasgo.ui.panel.FavouritePanel
 import com.example.abasgo.ui.panel.HistoryPanel
 import com.example.abasgo.ui.panel.MenuPanel
 import com.example.abasgo.ui.panel.RoulettePanel
-import com.example.abasgo.ui.state.AppPanel
-import com.example.abasgo.ui.state.FavouriteUIState
+import com.example.abasgo.ui.panel.VisitedPlaceDetailPanel
+import com.example.abasgo.ui.panel.VisitedPlaceEditPanel
 import com.example.abasgo.ui.viewmodel.FavouriteViewModel
-import com.example.abasgo.ui.viewmodel.MainViewModel
+import com.example.abasgo.ui.viewmodel.VisitedViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.HiltAndroidApp
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.navArgument
+import androidx.navigation.NavType
+import com.example.abasgo.ui.getCurrentAppRoute
 
 
 @HiltAndroidApp
@@ -57,7 +66,9 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun ABASgoApp() {
-    val viewModel: MainViewModel = viewModel()
+    val navController = rememberNavController()
+    val navBackStackEntry = navController.currentBackStackEntryAsState().value
+    val currentAppRoute = getCurrentAppRoute(navBackStackEntry)
 
     SystemBars(
         statusBarColor = DarkGreen,
@@ -65,14 +76,20 @@ fun ABASgoApp() {
         darkIcons = false
     )
 
-    val currentPanel = viewModel.getCurrentPanel()
-
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         bottomBar = {
             NavigationBar(
-                current = currentPanel,
-                onSelect = { viewModel.replacePanel(it) },
+                current = currentAppRoute,
+                onSelect = { appRoute ->
+                    navController.navigate(appRoute.route) {
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            saveState = true
+                        }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                },
                 modifier = Modifier
                     .navigationBarsPadding()
                     .padding(horizontal = 12.dp)
@@ -88,31 +105,85 @@ fun ABASgoApp() {
             )
         }
     ) { innerPadding ->
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.Center
-        ) {
-            val panelModifier = Modifier
-                .fillMaxWidth()
-                .padding(innerPadding)
-                .padding(horizontal = 12.dp)
-                .padding(vertical = 12.dp)
+        Box(modifier = Modifier.fillMaxSize()) {
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Center
+            ) {
+                val panelModifier = Modifier
+                    .fillMaxWidth()
+                    .padding(innerPadding)
+                    .padding(horizontal = 12.dp)
+                    .padding(vertical = 12.dp)
 
-            when (currentPanel) {
-                AppPanel.FAVORITE -> {
-                    val vm: FavouriteViewModel = hiltViewModel()
-                    val uiState by vm.uiState.collectAsStateWithLifecycle()
+                // Register new routes here
+                NavHost(
+                    navController = navController,
+                    startDestination = AppRoute.Map.route,
+                ) {
+                    composable(AppRoute.Map.route) {
+                    // Map here
+                    }
 
-                    FavouritePanel(
-                        modifier = panelModifier,
-                        uiState = uiState,
-                        onEvent = { event -> vm.onEvent(event) }
-                    )
+                    composable(AppRoute.Favourite.route) {
+                        val vm: FavouriteViewModel = hiltViewModel()
+                        val uiState by vm.uiState.collectAsStateWithLifecycle()
+
+                        FavouritePanel(
+                            modifier = panelModifier,
+                            uiState = uiState,
+                            onEvent = { event -> vm.onEvent(event) }
+                        )
+                    }
+
+                    composable(AppRoute.History.route) {
+                        val vm: VisitedViewModel = hiltViewModel()
+                        val uiState by vm.uiState.collectAsStateWithLifecycle()
+
+                        HistoryPanel(
+                            modifier = panelModifier,
+                            uiState = uiState,
+                            onEvent = { event -> vm.onEvent(event) },
+                            onSelectPlace = { placeId ->
+                                navController.navigate(AppRoute.HistoryDetail.create(placeId))
+                            }
+                        )
+                    }
+
+                    composable(AppRoute.Roulette.route) { RoulettePanel(panelModifier) }
+                    composable(AppRoute.Menu.route) { MenuPanel(panelModifier) }
+
+                    composable(
+                        route = AppRoute.HistoryDetail.route,
+                        arguments = listOf(
+                            navArgument(
+                                AppRoute.HistoryDetail.ARG_PLACE_ID
+                            ) {
+                                type = NavType.LongType
+                            }
+                        )
+                    ) {
+                        VisitedPlaceDetailPanel(
+                            modifier = panelModifier,
+                            onEditClick = { placeId ->
+                                navController.navigate(AppRoute.HistoryEdit.create(placeId))
+                            }
+                        )
+                    }
+
+                    composable(
+                        route = AppRoute.HistoryEdit.route,
+                        arguments = listOf(
+                            navArgument(AppRoute.HistoryEdit.ARG_PLACE_ID) { type = NavType.LongType }
+                        )
+                    ) {
+                        VisitedPlaceEditPanel(
+                            modifier = panelModifier,
+                            onCancel = { navController.navigateUp() },
+                            onSaved = { navController.navigateUp() }
+                        )
+                    }
                 }
-                AppPanel.HISTORY -> HistoryPanel(panelModifier)
-                AppPanel.ROULETTE -> RoulettePanel(panelModifier)
-                AppPanel.MENU -> MenuPanel(panelModifier)
-                AppPanel.MAP -> {}
             }
         }
     }
@@ -133,55 +204,5 @@ private fun ABASgoAppPreviewContent() {
         navigationBarColor = DarkGreen,
         darkIcons = false
     )
-
-    val viewModel: MainViewModel = viewModel()
-    val currentPanel = viewModel.getCurrentPanel()
-
-    Scaffold(
-        modifier = Modifier.fillMaxSize(),
-        bottomBar = {
-            NavigationBar(
-                current = currentPanel,
-                onSelect = { viewModel.replacePanel(it) },
-                modifier = Modifier
-                    .navigationBarsPadding()
-                    .padding(horizontal = 12.dp)
-                    .padding(vertical = 12.dp),
-            )
-        },
-        topBar = {
-            SearchBar(
-                modifier = Modifier
-                    .statusBarsPadding()
-                    .padding(horizontal = 12.dp)
-                    .padding(vertical = 12.dp),
-            )
-        }
-    ) { innerPadding ->
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.Center
-        ) {
-            val panelModifier = Modifier
-                .fillMaxWidth()
-                .padding(innerPadding)
-                .padding(horizontal = 12.dp)
-                .padding(vertical = 12.dp)
-
-            when (currentPanel) {
-                AppPanel.FAVORITE -> {
-
-                    FavouritePanel(
-                        modifier = panelModifier,
-                        uiState = FavouriteUIState.Success(places = emptyList()),
-                        onEvent = { }
-                    )
-                }
-                AppPanel.HISTORY -> HistoryPanel(panelModifier)
-                AppPanel.ROULETTE -> RoulettePanel(panelModifier)
-                AppPanel.MENU -> MenuPanel(panelModifier)
-                AppPanel.MAP -> {}
-            }
-        }
-    }
+    ABASgoApp()
 }

@@ -4,8 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.abasgo.data.entity.FavouritePlace
 import com.example.abasgo.data.repository.FavouritePlaceRepository
-import com.example.abasgo.ui.events.FavouriteEvent
-import com.example.abasgo.ui.state.FavouriteUIState
+import com.example.abasgo.ui.event.FavouriteEvent
+import com.example.abasgo.ui.state.FavouriteState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -17,14 +17,14 @@ import javax.inject.Inject
 class FavouriteViewModel @Inject constructor(
     private val repository: FavouritePlaceRepository
 ) : ViewModel() {
-    private val _uiState = MutableStateFlow<FavouriteUIState>(FavouriteUIState.Loading)
-    val uiState: StateFlow<FavouriteUIState> = _uiState.asStateFlow()
+    private val _uiState = MutableStateFlow<FavouriteState>(FavouriteState.Loading)
+    val uiState: StateFlow<FavouriteState> = _uiState.asStateFlow()
 
     init {
         viewModelScope.launch {
             repository.getAll()
                 .collect { places ->
-                    _uiState.value = FavouriteUIState.Success(places)
+                    _uiState.value = FavouriteState.Success(places)
                 }
         }
     }

@@ -1,4 +1,4 @@
-package com.example.abasgo.ui.events
+package com.example.abasgo.ui.event
 
 import com.example.abasgo.data.entity.FavouritePlace
 

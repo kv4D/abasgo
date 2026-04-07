@@ -11,6 +11,9 @@ import kotlinx.coroutines.flow.Flow
 interface VisitedPlaceDao {
     @Query("SELECT * FROM visited_places")
     fun getAll(): Flow<List<VisitedPlace>>
+
+    @Query("SELECT * FROM visited_places WHERE id = :id LIMIT 1")
+    fun getById(id: Long): Flow<VisitedPlace?>
     @Delete
     suspend fun delete(place: VisitedPlace)
 
