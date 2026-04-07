@@ -18,6 +18,10 @@ navigationCompose = "2.9.4"
 navigationComposeVersion = "2.9.7"
 
 [libraries]
+androidx-compose-material-icons-core = { module = "androidx.compose.material:material-icons-core" }
+androidx-compose-material-icons-extended = { module = "androidx.compose.material:material-icons-extended" }
+maplibre-composeMaterial3 = { module = "org.maplibre.compose:maplibre-compose-material3", version = "0.12.1" }
+maplibre-compose = { module = "org.maplibre.compose:maplibre-compose", version = "0.12.1" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-hilt-lifecycle-viewmodel-compose = { module = "androidx.hilt:hilt-lifecycle-viewmodel-compose", version.ref = "hiltLifecycleViewmodelCompose" }
 androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleViewmodelCompose" }

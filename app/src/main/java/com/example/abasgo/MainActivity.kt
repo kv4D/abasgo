@@ -8,6 +8,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
@@ -16,6 +17,7 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
@@ -45,6 +47,17 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.navArgument
 import androidx.navigation.NavType
 import com.example.abasgo.ui.getCurrentAppRoute
+import org.maplibre.compose.camera.CameraPosition
+import org.maplibre.compose.camera.rememberCameraState
+import org.maplibre.compose.map.MapOptions
+import org.maplibre.compose.map.MaplibreMap
+import org.maplibre.compose.map.OrnamentOptions
+import org.maplibre.compose.material3.CompassButton
+import org.maplibre.compose.material3.ExpandingAttributionButton
+import org.maplibre.compose.material3.ScaleBar
+import org.maplibre.compose.style.BaseStyle
+import org.maplibre.compose.style.rememberStyleState
+import org.maplibre.spatialk.geojson.Position
 
 
 @HiltAndroidApp
@@ -106,6 +119,31 @@ fun ABASgoApp() {
         }
     ) { innerPadding ->
         Box(modifier = Modifier.fillMaxSize()) {
+            val cameraState = rememberCameraState()
+            val styleState = rememberStyleState()
+            MaplibreMap(
+                baseStyle = BaseStyle.Uri("https://tiles.openfreemap.org/styles/liberty"),
+                cameraState = cameraState,
+                styleState = styleState,
+                options = MapOptions(ornamentOptions = OrnamentOptions.OnlyLogo),
+            )
+
+            Box(modifier = Modifier.fillMaxSize().padding(8.dp)) {
+                ScaleBar(
+                    cameraState.metersPerDpAtTarget,
+                    modifier = Modifier.align(Alignment.TopStart)
+                )
+                CompassButton(
+                    cameraState,
+                    modifier = Modifier.align(Alignment.TopEnd)
+                )
+                ExpandingAttributionButton(
+                    cameraState = cameraState,
+                    styleState = styleState,
+                    modifier = Modifier.align(Alignment.BottomEnd),
+                    contentAlignment = Alignment.BottomEnd,
+                )
+            }
             Column(
                 modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.Center
@@ -122,7 +160,6 @@ fun ABASgoApp() {
                     startDestination = AppRoute.Map.route,
                 ) {
                     composable(AppRoute.Map.route) {
-                    // Map here
                     }
 
                     composable(AppRoute.Favourite.route) {
