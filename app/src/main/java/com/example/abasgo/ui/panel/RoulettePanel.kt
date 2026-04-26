@@ -2,6 +2,7 @@ package com.example.abasgo.ui.panel
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
@@ -27,7 +28,7 @@ import com.example.abasgo.ui.theme.White
 
 @Composable
 fun RoulettePanel(modifier: Modifier = Modifier,) {
-    Panel(modifier) {
+    Panel(modifier.fillMaxHeight()) {
         Text(
             text="Рулетка путешественника",
             style = MaterialTheme.typography.titleMedium,

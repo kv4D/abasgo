@@ -47,10 +47,16 @@ import androidx.navigation.navArgument
 import androidx.navigation.NavType
 import com.example.abasgo.ui.component.ABASgoMap
 import com.example.abasgo.ui.getCurrentAppRoute
+import org.maplibre.android.log.Logger
 
 
 @HiltAndroidApp
-class ABASgoApplication : Application()
+class ABASgoApplication : Application() {
+    override fun onCreate() {
+        super.onCreate()
+        Logger.setVerbosity(Logger.ERROR)
+    }
+}
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
